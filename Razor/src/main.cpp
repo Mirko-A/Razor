@@ -20,7 +20,7 @@ Razor::Application* Razor::CreateApplication()
     return new Sandbox;
 }
 
-int main()
+int main(int argc, char** argv)
 {
     Razor::Log::Init();
     RZR_INFO("Engine starting...");
