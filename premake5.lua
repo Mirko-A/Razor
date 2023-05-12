@@ -71,15 +71,15 @@ project "Razor"
 
     filter "configurations:Debug"
         defines "RZR_DEBUG"
-		runtime "Debug"
+		buildoptions "/MDd"
         symbols "On"
 
     filter "configurations:Release"
         defines "RZR_RELEASE"
-		runtime "Release"
+		buildoptions "/MD"
         optimize "On"
 
     filter "configurations:Dist"
         defines "RZR_DIST"
-		runtime "Release"
+		buildoptions "/MD"
         optimize "On"
