@@ -1,0 +1,85 @@
+workspace "Razor"
+    architecture "x64"
+    
+	configurations
+    {
+        "Debug",
+        "Release",
+        "Dist"
+    }
+	
+    startproject "Razor"
+
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+
+-- Include directories relative to root folder (solution dir) 
+-- Currently not used, refer to the Game Engine series Ep. 11
+-- IncludeDir = {}
+-- IncludeDir["spdlog"] = "Engine/vendor/spdlog/include"
+-- IncludeDir["GLFW"] = "Engine/vendor/GLFW/include"
+-- IncludeDir["Glad"] = "Engine/vendor/Glad/include"
+-- IncludeDir["ImGui"] = "Engine/vendor/imgui/include"
+
+include "Razor/vendor/GLFW"
+include "Razor/vendor/Glad"
+include "Razor/vendor/imgui"
+
+project "Razor"
+    location "Razor"
+    kind "ConsoleApp"
+    language "C++"
+    
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	pchheader "rzr_pch.h"
+	pchsource "Razor/src/rzr_pch.cpp"
+
+    files
+    {
+        "%{prj.name}/include/**.h",
+        "%{prj.name}/src/**.cpp",
+    }
+
+    includedirs
+    {
+        "%{prj.name}/include",
+        "%{prj.name}/vendor/spdlog/include",
+        "%{prj.name}/vendor/GLFW/include",
+        "%{prj.name}/vendor/Glad/include",
+		"%{prj.name}/vendor/imgui",
+    }
+
+    links
+	{
+	    "GLFW",
+	    "Glad",
+		"ImGui",
+		"opengl32.lib"
+	}
+
+    filter "system:windows"
+        cppdialect "C++17"
+        staticruntime "On"
+        systemversion "latest"
+        
+        defines
+        {
+            "RZR_PLATFORM_WINDOWS",
+			"GLFW_INCLUDE_NONE"
+        }
+
+    filter "configurations:Debug"
+        defines "RZR_DEBUG"
+		buildoptions "/MDd"
+        symbols "On"
+
+    filter "configurations:Release"
+        defines "RZR_RELEASE"
+		buildoptions "/MD"
+        optimize "On"
+
+    filter "configurations:Dist"
+        defines "RZR_DIST"
+		buildoptions "/MD"
+        optimize "On"
