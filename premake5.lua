@@ -20,9 +20,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- IncludeDir["Glad"] = "Engine/vendor/Glad/include"
 -- IncludeDir["ImGui"] = "Engine/vendor/imgui/include"
 
-include "Razor/vendor/GLFW"
-include "Razor/vendor/Glad"
-include "Razor/vendor/imgui"
+group "Dependencies"
+    include "Razor/vendor/GLFW"
+    include "Razor/vendor/Glad"
+    include "Razor/vendor/imgui"
+
+group ""
 
 project "Razor"
     location "Razor"
@@ -60,7 +63,6 @@ project "Razor"
 
     filter "system:windows"
         cppdialect "C++17"
-        staticruntime "On"
         systemversion "latest"
         
         defines
@@ -71,15 +73,15 @@ project "Razor"
 
     filter "configurations:Debug"
         defines "RZR_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
         symbols "On"
 
     filter "configurations:Release"
         defines "RZR_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
         optimize "On"
 
     filter "configurations:Dist"
         defines "RZR_DIST"
-		buildoptions "/MD"
+		runtime "Release"
         optimize "On"
