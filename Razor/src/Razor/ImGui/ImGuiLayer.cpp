@@ -9,6 +9,9 @@
 #include "Platform/OpenGL/imgui_impl_opengl3.h"
 #include "Platform/OpenGL/imgui_impl_glfw.h"
 
+#include "Razor/Input.h"
+#include "Razor/Log.h"
+
 #define GLSL_VERSION "#version 410"
 
 namespace Razor
@@ -100,6 +103,6 @@ namespace Razor
 
     void ImGuiLayer::OnEvent(Event& e)
     {
-
+        RZR_CORE_INFO("{0}", e);
     }
 }
