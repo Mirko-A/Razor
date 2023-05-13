@@ -26,9 +26,6 @@ namespace Razor
     // Interface representing a desktop system based Window
     class Window
     {
-    protected:
-        GLFWwindow* m_Window;
-
     public:
         using EventCallbackFn = std::function<void(Event&)>;
 
@@ -36,10 +33,7 @@ namespace Razor
 
         virtual void OnUpdate() = 0;
 
-        inline GLFWwindow* GetGLFWwindow() const
-        {
-            return m_Window;
-        }
+        virtual inline void* GetNativeWindow() const = 0;
 
         virtual uint16_t GetWidth() const = 0;
         virtual uint16_t GetHeight() const = 0;

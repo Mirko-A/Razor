@@ -8,6 +8,8 @@ namespace Razor
     class WindowsWindow : public Window
     {
     private:
+        GLFWwindow* m_NativeWindow;
+
         struct WindowData
         {
             std::string Title;
@@ -26,6 +28,11 @@ namespace Razor
         virtual ~WindowsWindow();
 
         void OnUpdate() override;
+
+        inline void* GetNativeWindow() const override
+        {
+            return (void*) m_NativeWindow;
+        }
 
         inline uint16_t GetWidth() const override
         {

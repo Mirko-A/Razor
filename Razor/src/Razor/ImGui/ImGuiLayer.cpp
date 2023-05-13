@@ -29,7 +29,9 @@ namespace Razor
 
         ImGui::StyleColorsDark();
 
-        ImGui_ImplGlfw_InitForOpenGL(Application::Get().GetWindow().GetGLFWwindow(), true);
+        ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*) Application::Get()
+                                                               .GetWindow()
+                                                               .GetNativeWindow(), true);
         ImGui_ImplOpenGL3_Init(GLSL_VERSION);
     }
 
@@ -87,7 +89,7 @@ namespace Razor
             ImGui::Render();
         }
 
-        glfwGetFramebufferSize(Application::Get().GetWindow().GetGLFWwindow(), &DisplayWidth, &DisplayHeight);
+        glfwGetFramebufferSize((GLFWwindow*) Application::Get().GetWindow().GetNativeWindow(), &DisplayWidth, &DisplayHeight);
         glViewport(0, 0, DisplayWidth, DisplayHeight);
 
         glClearColor(ClearColor.x * ClearColor.w, ClearColor.y * ClearColor.w, ClearColor.z * ClearColor.w, ClearColor.w);
