@@ -45,6 +45,10 @@ namespace Razor
         bool OnWindowClose(WindowCloseEvent e);
     };
 
-    // TODO: Defined by Engine applications
+    // Mire, 5/13/2023
+    // As of right now, a sandbox class exists inside Application.cpp 
+    // file which used to create an instance of 'Application'
+    // TODO: Create a child class of 'Application' and implement
+    // a version of this function based on the current needs of the Engine
     Application* CreateApplication();
 }

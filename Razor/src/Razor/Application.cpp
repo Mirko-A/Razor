@@ -1,10 +1,11 @@
 #include "rzr_pch.h"
 #include "Razor/Application.h"
-#include "GLFW/glfw3.h"
 
-#include "Razor/Log.h"
-
+#include "Razor/Layer.h"
+#include "Razor/ImGui/ImGuiLayer.h"
 #include "Razor/Input.h"
+
+#include "GLFW/glfw3.h"
 
 namespace Razor
 {
@@ -67,5 +68,25 @@ namespace Razor
     {
         m_LayerStack.PushLayer(Overlay);
         Overlay->OnAttach();
+    }
+
+    // SANDBOX APPLICATION IS CREATED HERE
+    class Sandbox : public Razor::Application
+    {
+    public:
+        Sandbox()
+        {
+            PushLayer(new Razor::ImGuiLayer());
+        }
+
+        ~Sandbox()
+        {
+
+        }
+    };
+
+    Razor::Application* Razor::CreateApplication()
+    {
+        return new Sandbox;
     }
 }
