@@ -103,6 +103,6 @@ namespace Razor
 
     void ImGuiLayer::OnEvent(Event& e)
     {
-        RZR_CORE_INFO("{0}", e);
+
     }
 }

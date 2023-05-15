@@ -67,12 +67,31 @@ namespace Razor
     }
 
     // SANDBOX APPLICATION IS CREATED HERE
+    class TestLayer : public Razor::Layer
+    {
+    public:
+        TestLayer(const std::string& Name = "Test layer")
+        {
+
+        }
+
+        void OnEvent(Event& e) 
+        {
+            if (e.GetEventType() == Razor::EventType::KeyPressed)
+            {
+                KeyPressedEvent& Event = (KeyPressedEvent&) e;
+                RZR_INFO("KEY {0} PRESSED", (char) Event.GetKeyCode());
+            }
+        }
+    };
+
     class Sandbox : public Razor::Application
     {
     public:
         Sandbox()
         {
             PushLayer(new Razor::ImGuiLayer());
+            PushLayer(new Razor::TestLayer());
         }
 
         ~Sandbox()

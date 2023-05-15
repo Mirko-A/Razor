@@ -19,6 +19,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- IncludeDir["GLFW"] = "Engine/vendor/GLFW/include"
 -- IncludeDir["Glad"] = "Engine/vendor/Glad/include"
 -- IncludeDir["ImGui"] = "Engine/vendor/imgui/include"
+-- IncludeDir["ImGui"] = "Engine/vendor/glm/glm"
 
 group "Dependencies"
     include "Razor/vendor/GLFW"
@@ -42,6 +43,10 @@ project "Razor"
     {
         "%{prj.name}/include/**.h",
         "%{prj.name}/src/**.cpp",
+        "%{prj.name}/vendor/glm/glm/**.hpp",
+        "%{prj.name}/vendor/glm/glm/**.h",
+        "%{prj.name}/vendor/glm/glm/**.inl",
+        "%{prj.name}/vendor/glm/glm/**.cpp",
     }
 
     includedirs
@@ -51,6 +56,7 @@ project "Razor"
         "%{prj.name}/vendor/GLFW/include",
         "%{prj.name}/vendor/Glad/include",
 		"%{prj.name}/vendor/imgui",
+		"%{prj.name}/vendor/glm/glm",
     }
 
     links
