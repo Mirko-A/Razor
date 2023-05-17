@@ -3,14 +3,14 @@
 
 #include "Razor/Application.h"
 
-#include "GLFW/glfw3.h"
-
-#include "Platform/OpenGL/imgui_impl_opengl3_loader.h"
-#include "Platform/OpenGL/imgui_impl_opengl3.h"
-#include "Platform/OpenGL/imgui_impl_glfw.h"
-
 #include "Razor/Input.h"
 #include "Razor/Log.h"
+
+#include "glad/glad.h"
+#include "backends/imgui_impl_opengl3.h"
+#include "backends/imgui_impl_glfw.h"
+
+#include "GLFW/glfw3.h"
 
 #define GLSL_VERSION "#version 410"
 
@@ -29,6 +29,8 @@ namespace Razor
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
         ImGui::StyleColorsDark();
 
@@ -67,6 +69,11 @@ namespace Razor
         bool show_another_window = false;
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+        // 1. Show a demo window 
+        {
+            ImGui::ShowDemoWindow(&show_demo_window);
+        }
+
         // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
         {
             static float f = 0.0f;
@@ -99,6 +106,14 @@ namespace Razor
         glClear(GL_COLOR_BUFFER_BIT);
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        if (IO.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
     }
 
     void ImGuiLayer::OnEvent(Event& e)

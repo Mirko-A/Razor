@@ -13,3 +13,9 @@
 [submodule ".\\Razor\\vendor\\ImGui"]
 	path = .\\Razor\\vendor\\ImGui
 	url = https://github.com/ocornut/imgui.git
+[submodule ".\\Razor\\vendor\\GLFW"]
+	path = .\\Razor\\vendor\\GLFW
+	url = https://github.com/glfw/glfw
+[submodule ".\\Razor\\vendor\\spdlog"]
+	path = .\\Razor\\vendor\\spdlog
+	url = https://github.com/gabime/spdlog
