@@ -46,7 +46,6 @@ project "Razor"
         "%{prj.name}/vendor/glm/glm/**.hpp",
         "%{prj.name}/vendor/glm/glm/**.h",
         "%{prj.name}/vendor/glm/glm/**.inl",
-        "%{prj.name}/vendor/glm/glm/**.cpp",
     }
 
     includedirs

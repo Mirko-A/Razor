@@ -3,14 +3,12 @@
 
 #include "Razor/Application.h"
 
-#include "GLFW/glfw3.h"
-
-#include "Platform/OpenGL/imgui_impl_opengl3_loader.h"
-#include "Platform/OpenGL/imgui_impl_opengl3.h"
-#include "Platform/OpenGL/imgui_impl_glfw.h"
-
 #include "Razor/Input.h"
 #include "Razor/Log.h"
+
+#include "backends/imgui_impl_opengl3.h"
+#include "backends/imgui_impl_glfw.h"
+#include "GLFW/glfw3.h"
 
 #define GLSL_VERSION "#version 410"
 
