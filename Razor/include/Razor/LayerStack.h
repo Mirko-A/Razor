@@ -11,7 +11,7 @@ namespace Razor
     {
     private:
         std::vector<Layer*> m_Layers;
-        std::vector<Layer*>::iterator m_LayerInsert;
+        uint16_t m_LayerInsertIndex;
 
     public:
         LayerStack();

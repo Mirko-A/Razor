@@ -19,7 +19,7 @@ namespace Razor
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_FN(Application::OnEvent));
 
-        m_ImGuiLayer = std::make_unique<ImGuiLayer>();
+        m_ImGuiLayer = new ImGuiLayer();
     }
 
     Application::~Application() {}

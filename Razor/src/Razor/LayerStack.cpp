@@ -5,7 +5,7 @@ namespace Razor
 {
     LayerStack::LayerStack()
     {
-        m_LayerInsert = m_Layers.begin();
+        m_LayerInsertIndex = 0;
     }
 
     LayerStack::~LayerStack()
@@ -18,7 +18,8 @@ namespace Razor
 
     void LayerStack::PushLayer(Layer* Layer)
     {
-        m_LayerInsert = m_Layers.emplace(m_LayerInsert, Layer);
+        m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, Layer);
+        m_LayerInsertIndex++;
     }
 
     void LayerStack::PopLayer(Layer* Layer)
@@ -26,7 +27,7 @@ namespace Razor
         auto it = std::find(m_Layers.begin(), m_Layers.end(), Layer);
         if (it != m_Layers.end())
         {
-            m_LayerInsert--;
+            m_LayerInsertIndex--;
             m_Layers.erase(it);
         }
     }
