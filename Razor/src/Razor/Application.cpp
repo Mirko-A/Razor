@@ -18,6 +18,8 @@ namespace Razor
 
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_FN(Application::OnEvent));
+
+        m_ImGuiLayer = std::make_unique<ImGuiLayer>();
     }
 
     Application::~Application() {}
@@ -30,6 +32,13 @@ namespace Razor
             {
                 Layer->OnUpdate();
             }
+
+            m_ImGuiLayer->Begin();
+            for (Layer* Layer : m_LayerStack)
+            {
+                Layer->RenderImGui();
+            }
+            m_ImGuiLayer->End();
 
             m_Window->OnUpdate();
         }
@@ -82,6 +91,23 @@ namespace Razor
                 KeyPressedEvent& Event = (KeyPressedEvent&) e;
                 RZR_INFO("KEY {0} PRESSED", (char) Event.GetKeyCode());
             }
+        }
+
+        void RenderImGui()
+        {
+            ImGui::Begin("Test layer window");
+            static ImVec4 ClearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);            
+            static float f = 0.0f;
+            static int counter = 0;
+
+            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+            ImGui::ColorEdit3("clear color", (float*)&ClearColor); // Edit 3 floats representing a color
+
+            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text("counter = %d", counter);
+            ImGui::End();
         }
     };
 

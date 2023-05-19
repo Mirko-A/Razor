@@ -3,6 +3,8 @@
 #include "Razor/Core.h"
 #include "Razor/Events/Event.h"
 
+#include "imgui.h"
+
 namespace Razor
 {
     class Layer
@@ -15,6 +17,8 @@ namespace Razor
         virtual void OnDetach() {}
         virtual void OnUpdate() {}
         virtual void OnEvent(Event& e) {}
+
+        virtual void RenderImGui() {}
 
         inline const std::string& GetName() const
         {

@@ -9,10 +9,7 @@
    3. Call the RenderImGui() function which contains all of the ImGui element rendering calls
    4. Call the End() function to render all the ImGui elements 
    
-   Note: All of this is done inside the OnUpdate function */
-
-/* Forward declaration needed */
-struct ImGuiIO;
+   Note: All of this is done inside the Application::Run() function. */
 
 namespace Razor
 {
@@ -26,9 +23,11 @@ namespace Razor
         void OnDetach() override;
         void OnUpdate() override;
 
+        void RenderImGui() override;
+
         void Begin();
-        void End(ImGuiIO& IO);
-        void RenderImGui(ImGuiIO& IO);
+        void End();
+
     private:
         float m_Time = 0.0f;
     };

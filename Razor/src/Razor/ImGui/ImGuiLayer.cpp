@@ -57,44 +57,15 @@ namespace Razor
         float dt = m_Time - Time;
         IO.DeltaTime = (dt > 0) ? dt : (1.0f / 60.0f);
         m_Time = Time;
-
-        Begin();
-        RenderImGui(IO);
-        End(IO);
     }
 
-    void ImGuiLayer::Begin()
+    void ImGuiLayer::RenderImGui()
     {
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-    }
+        ImGuiIO& IO = ImGui::GetIO();
 
-    void ImGuiLayer::End(ImGuiIO& IO)
-    {
-        int DisplayWidth;
-        int DisplayHeight;
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        glfwGetFramebufferSize((GLFWwindow*)Application::Get().GetWindow().GetNativeWindow(), &DisplayWidth, &DisplayHeight);
-        glViewport(0, 0, DisplayWidth, DisplayHeight);
-
-        if (IO.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
-            GLFWwindow* backup_current_context = glfwGetCurrentContext();
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-            glfwMakeContextCurrent(backup_current_context);
-        }
-    }
-
-    void ImGuiLayer::RenderImGui(ImGuiIO& IO)
-    {
         bool show_demo_window = true;
         bool show_another_window = false;
-        
+
         static ImVec4 ClearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
         glClearColor(ClearColor.x * ClearColor.w, ClearColor.y * ClearColor.w, ClearColor.z * ClearColor.w, ClearColor.w);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -125,6 +96,35 @@ namespace Razor
 
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / IO.Framerate, IO.Framerate);
             ImGui::End();
+        }
+    }
+
+    void ImGuiLayer::Begin()
+    {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+    }
+
+    void ImGuiLayer::End()
+    {
+        int DisplayWidth;
+        int DisplayHeight;
+
+        ImGuiIO& IO = ImGui::GetIO();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        glfwGetFramebufferSize((GLFWwindow*)Application::Get().GetWindow().GetNativeWindow(), &DisplayWidth, &DisplayHeight);
+        glViewport(0, 0, DisplayWidth, DisplayHeight);
+
+        if (IO.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
         }
     }
 }
