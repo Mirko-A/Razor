@@ -48,24 +48,54 @@ namespace Razor
 
     void ImGuiLayer::OnUpdate()
     {
-        ImVec4 ClearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-        int DisplayWidth;
-        int DisplayHeight;
-
         ImGuiIO& IO = ImGui::GetIO();
         Application& App = Application::Get();
 
-        IO.DisplaySize = ImVec2((float) App.GetWindow().GetWidth(), (float) App.GetWindow().GetHeight());
+        IO.DisplaySize = ImVec2((float)App.GetWindow().GetWidth(), (float)App.GetWindow().GetHeight());
 
         float Time = (float)glfwGetTime();
         float dt = m_Time - Time;
         IO.DeltaTime = (dt > 0) ? dt : (1.0f / 60.0f);
         m_Time = Time;
 
+        Begin();
+        RenderImGui(IO);
+        End(IO);
+    }
+
+    void ImGuiLayer::Begin()
+    {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+    }
 
+    void ImGuiLayer::End(ImGuiIO& IO)
+    {
+        ImVec4 ClearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+        int DisplayWidth;
+        int DisplayHeight;
+
+        glClearColor(ClearColor.x * ClearColor.w, ClearColor.y * ClearColor.w, ClearColor.z * ClearColor.w, ClearColor.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        glfwGetFramebufferSize((GLFWwindow*)Application::Get().GetWindow().GetNativeWindow(), &DisplayWidth, &DisplayHeight);
+        glViewport(0, 0, DisplayWidth, DisplayHeight);
+
+        if (IO.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
+    }
+
+    void ImGuiLayer::RenderImGui(ImGuiIO& IO)
+    {
         bool show_demo_window = true;
         bool show_another_window = false;
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -96,29 +126,6 @@ namespace Razor
 
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / IO.Framerate, IO.Framerate);
             ImGui::End();
-
-            ImGui::Render();
         }
-
-        glfwGetFramebufferSize((GLFWwindow*) Application::Get().GetWindow().GetNativeWindow(), &DisplayWidth, &DisplayHeight);
-        glViewport(0, 0, DisplayWidth, DisplayHeight);
-
-        glClearColor(ClearColor.x * ClearColor.w, ClearColor.y * ClearColor.w, ClearColor.z * ClearColor.w, ClearColor.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        if (IO.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
-            GLFWwindow* backup_current_context = glfwGetCurrentContext();
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-            glfwMakeContextCurrent(backup_current_context);
-        }
-    }
-
-    void ImGuiLayer::OnEvent(Event& e)
-    {
-
     }
 }
