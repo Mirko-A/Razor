@@ -12,10 +12,22 @@
 #include "LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
 
+/* Mire, 5/20/2023
+   Razor has been converted into a static library. This means that
+   as of right now the usage of Razor by clients is as follows:
+   1. Create a child of the Application class
+   2. Implement the CreateApplication method
+   3. Create an instance of the application in your main function and
+   4. Run the application
+
+   For more information, see an example main() function in Razor.h */
+
 namespace Razor
 {
     class Application
     {
+    public:
+        static Application* CreateApplication();
     private:
         static Application* s_Instance;
         std::unique_ptr<Window> m_Window;
@@ -46,11 +58,4 @@ namespace Razor
     private:
         bool OnWindowClose(WindowCloseEvent e);
     };
-
-    // Mire, 5/13/2023
-    // As of right now, a sandbox class exists inside Application.cpp 
-    // file which used to create an instance of 'Application'
-    // TODO: Create a child class of 'Application' and implement
-    // a version of this function based on the current needs of the Engine
-    Application* CreateApplication();
 }

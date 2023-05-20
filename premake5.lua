@@ -8,7 +8,7 @@ workspace "Razor"
         "Dist"
     }
 	
-    startproject "Razor"
+    startproject "Prototype"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
@@ -30,7 +30,7 @@ group ""
 
 project "Razor"
     location "Razor"
-    kind "ConsoleApp"
+    kind "staticlib"
     language "C++"
     
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -64,6 +64,62 @@ project "Razor"
 	    "Glad",
 		"ImGui",
 		"opengl32.lib"
+	}
+
+    filter "system:windows"
+        cppdialect "C++17"
+        systemversion "latest"
+		staticruntime "on"
+        
+        defines
+        {
+            "RZR_PLATFORM_WINDOWS",
+			"GLFW_INCLUDE_NONE"
+        }
+
+    filter "configurations:Debug"
+        defines "RZR_DEBUG"
+		runtime "Debug"
+        symbols "On"
+
+    filter "configurations:Release"
+        defines "RZR_RELEASE"
+		runtime "Release"
+        optimize "On"
+
+    filter "configurations:Dist"
+        defines "RZR_DIST"
+		runtime "Release"
+        optimize "On"
+
+
+project "Prototype"
+    location "Prototype"
+    kind "ConsoleApp"
+    language "C++"
+    
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    files
+    {
+        "%{prj.name}/include/**.h",
+        "%{prj.name}/src/**.cpp",
+    }
+
+    includedirs
+    {
+        "Razor/include",
+        "Razor/vendor/spdlog/include",
+        "Razor/vendor/GLFW/include",
+        "Razor/vendor/Glad/include",
+		"Razor/vendor/imgui",
+		"Razor/vendor/glm/glm",
+    }
+
+    links
+	{
+	    "Razor",
 	}
 
     filter "system:windows"

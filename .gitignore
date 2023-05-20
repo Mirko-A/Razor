@@ -3,3 +3,4 @@ Razor/.vs/*
 bin*
 *.sln*
 *.vcxproj*
+*.ini
