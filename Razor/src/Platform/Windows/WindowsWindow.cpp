@@ -1,6 +1,8 @@
 #include "rzr_pch.h"
 #include "Platform/Windows/WindowsWindow.h"
 
+#include "Platform/OpenGL/OpenGLContext.h"
+
 #include "Razor/Events/ApplicationEvent.h"
 #include "Razor/Events/KeyEvent.h"
 #include "Razor/Events/MouseEvent.h"
@@ -33,14 +35,15 @@ namespace Razor
         }
 
         m_NativeWindow = glfwCreateWindow((int)Props.Width, (int)Props.Height, Props.Title.c_str(), nullptr, nullptr);
-        glfwMakeContextCurrent(m_NativeWindow);
-        int LoadResult = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-        RZR_CORE_ASSERT(LoadResult, "Could not initialize Glad!");
+        m_Context = new OpenGLContext();
+        m_Context->Init(m_NativeWindow);
+
         glfwSetWindowUserPointer(m_NativeWindow, &m_Data);
         SetVSync(true);
 
         // Set GLFW callbacks
-        glfwSetWindowSizeCallback(m_NativeWindow, [](GLFWwindow* window, int width, int height)
+        glfwSetWindowSizeCallback(m_NativeWindow, 
+            [](GLFWwindow* window, int width, int height)
             {
                 WindowData& Data = *((WindowData*) glfwGetWindowUserPointer(window));
 
@@ -51,7 +54,8 @@ namespace Razor
                 Data.EventCallback(Event);
             });
 
-        glfwSetWindowCloseCallback(m_NativeWindow, [](GLFWwindow* Window)
+        glfwSetWindowCloseCallback(m_NativeWindow, 
+            [](GLFWwindow* Window)
             {
                 WindowData& Data = *((WindowData*)glfwGetWindowUserPointer(Window));
 
@@ -59,7 +63,8 @@ namespace Razor
                 Data.EventCallback(Event);
             });
 
-        glfwSetKeyCallback(m_NativeWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+        glfwSetKeyCallback(m_NativeWindow, 
+            [](GLFWwindow* window, int key, int scancode, int action, int mods)
             {
                 WindowData& Data = *((WindowData*)glfwGetWindowUserPointer(window));
 
@@ -91,7 +96,8 @@ namespace Razor
                 }
             });
         
-        glfwSetMouseButtonCallback(m_NativeWindow, [](GLFWwindow* window, int button, int action, int mods)
+        glfwSetMouseButtonCallback(m_NativeWindow, 
+            [](GLFWwindow* window, int button, int action, int mods)
             {
                 WindowData& Data = *((WindowData*)glfwGetWindowUserPointer(window));
 
@@ -117,7 +123,8 @@ namespace Razor
                 }
             });
 
-        glfwSetScrollCallback(m_NativeWindow, [](GLFWwindow* window, double xoffset, double yoffset)
+        glfwSetScrollCallback(m_NativeWindow, 
+            [](GLFWwindow* window, double xoffset, double yoffset)
             {
                 WindowData& Data = *((WindowData*)glfwGetWindowUserPointer(window));
 
@@ -125,7 +132,8 @@ namespace Razor
                 Data.EventCallback(Event);
             });
 
-        glfwSetCursorPosCallback(m_NativeWindow, [](GLFWwindow* window, double xpos, double ypos)
+        glfwSetCursorPosCallback(m_NativeWindow, 
+            [](GLFWwindow* window, double xpos, double ypos)
             {
                 WindowData& Data = *((WindowData*)glfwGetWindowUserPointer(window));
 
@@ -158,7 +166,7 @@ namespace Razor
     void WindowsWindow::OnUpdate()
     {
         glfwPollEvents();
-        glfwSwapBuffers(m_NativeWindow);
+        m_Context->SwapBuffers(m_NativeWindow);
     }
 
     void WindowsWindow::SetVSync(bool Enabled)

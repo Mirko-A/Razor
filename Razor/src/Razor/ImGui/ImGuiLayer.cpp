@@ -66,10 +66,6 @@ namespace Razor
         bool show_demo_window = true;
         bool show_another_window = false;
 
-        static ImVec4 ClearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-        glClearColor(ClearColor.x * ClearColor.w, ClearColor.y * ClearColor.w, ClearColor.z * ClearColor.w, ClearColor.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-
         // 1. Show a demo window 
         {
             ImGui::ShowDemoWindow(&show_demo_window);
@@ -87,7 +83,7 @@ namespace Razor
             ImGui::Checkbox("Another Window", &show_another_window);
 
             ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3("clear color", (float*)&ClearColor); // Edit 3 floats representing a color
+            // ImGui::ColorEdit3("clear color", (float*)&ClearColor); // Edit 3 floats representing a color
 
             if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
                 counter++;

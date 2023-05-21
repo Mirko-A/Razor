@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Razor/Window.h"
-#include "glad/glad.h"
+#include "Razor/Renderer/RenderContext.h"
 
 namespace Razor
 {
@@ -9,6 +9,7 @@ namespace Razor
     {
     private:
         GLFWwindow* m_NativeWindow;
+        RenderContext* m_Context;
 
         struct WindowData
         {
@@ -51,6 +52,7 @@ namespace Razor
         }
         void SetVSync(bool Enabled) override;
         bool IsVSync() const override;
+
     private:
         virtual void Init(const WindowProps& Props);
         virtual void Shutdown();

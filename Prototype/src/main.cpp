@@ -1,5 +1,7 @@
 #include "Razor.h"
 
+extern float vertices[];
+
 // SANDBOX APPLICATION IS CREATED HERE
 class TestLayer : public Razor::Layer
 {
@@ -20,18 +22,30 @@ public:
 
     void RenderImGui()
     {
-        ImGui::Begin("Test layer window");
-        static ImVec4 ClearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-        static float f = 0.0f;
-        static int counter = 0;
+        ImGui::Begin("Cube editor");
+        ImGui::SliderFloat("V0 X", &vertices[3 * 0], -1.0f, 1.0f);
+        ImGui::SliderFloat("V0 Y", &vertices[3 * 0 + 1],  -1.0f, 1.0f);
 
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::ColorEdit3("clear color", (float*)&ClearColor); // Edit 3 floats representing a color
+        ImGui::SliderFloat("V1 X", &vertices[3 * 1],  -1.0f, 1.0f);
+        ImGui::SliderFloat("V1 Y", &vertices[3 * 1 + 1],  -1.0f, 1.0f);
 
-        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text("counter = %d", counter);
+        ImGui::SliderFloat("V2 X", &vertices[3 * 2],  -1.0f, 1.0f);
+        ImGui::SliderFloat("V2 Y", &vertices[3 * 2 + 1],  -1.0f, 1.0f);
+
+        ImGui::SliderFloat("V3 X", &vertices[3 * 3],  -1.0f, 1.0f);
+        ImGui::SliderFloat("V3 Y", &vertices[3 * 3 + 1], -1.0f, 1.0f);
+
+        ImGui::SliderFloat("V4 X", &vertices[3 * 4], -1.0f, 1.0f);
+        ImGui::SliderFloat("V4 Y", &vertices[3 * 4 + 1], -1.0f, 1.0f);
+
+        ImGui::SliderFloat("V5 X", &vertices[3 * 5], -1.0f, 1.0f);
+        ImGui::SliderFloat("V5 Y", &vertices[3 * 5 + 1], -1.0f, 1.0f);
+
+        ImGui::SliderFloat("V6 X", &vertices[3 * 6], -1.0f, 1.0f);
+        ImGui::SliderFloat("V6 Y", &vertices[3 * 6 + 1], -1.0f, 1.0f);
+
+        ImGui::SliderFloat("V7 X", &vertices[3 * 7], -1.0f, 1.0f);
+        ImGui::SliderFloat("V7 Y", &vertices[3 * 7 + 1], -1.0f, 1.0f);
         ImGui::End();
     }
 };
