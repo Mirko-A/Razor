@@ -1,10 +1,11 @@
 #include "rzr_pch.h"
-#include "Razor/Application.h"
+#include "Application.h"
 
-#include "Razor/Layer.h"
-#include "Razor/ImGui/ImGuiLayer.h"
-#include "Razor/Input.h"
+#include "Layer.h"
+#include "ImGui/ImGuiLayer.h"
+#include "Input.h"
 
+// TODO: Remove once VBO and IBO abstraction is in place
 #include "glad/glad.h"
 
 #define VERTEX_COUNT (8)
@@ -19,6 +20,16 @@ float vertices[VERTEX_COUNT * 3] =
      -0.145f, -0.381f, 0.0f,
       0.165f,  0.010f, 0.0f,
      -0.031f,  0.310f, 0.0f,
+};
+
+uint32_t indices[INDEX_COUNT] =
+{
+    3, 1, 2,
+    3, 0, 1,
+    4, 0, 3,
+    4, 5, 0,
+    0, 5, 7,
+    5, 6, 7,
 };
 
 namespace Razor
@@ -50,10 +61,17 @@ namespace Razor
         FragmentSourceStringStream << SourceFile.rdbuf();
         SourceFile.close();
 
+        m_Renderer = std::make_unique<Renderer>();
+        m_VertexBuffer = m_Renderer->CreateVertexBuffer(vertices, sizeof(vertices));
+        m_IndexBuffer =  m_Renderer->CreateIndexBuffer(indices, sizeof(indices));
+
         m_Shader = std::make_unique<Shader>(VertexSourceStringStream.str(), FragmentSourceStringStream.str());
     }
 
-    Application::~Application() {}
+    Application::~Application() 
+    {
+        RZR_CORE_INFO("Application closing...");
+    }
 
     void Application::Run()
     {
@@ -80,28 +98,13 @@ namespace Razor
             glGenVertexArrays(1, &m_VertexArray);
             glBindVertexArray(m_VertexArray);
 
-            glGenBuffers(1, &m_VertexBuffer);
-            glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-
-            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+            m_VertexBuffer->SetData(vertices, sizeof(vertices));
+            m_VertexBuffer->Bind();
 
             glEnableVertexAttribArray(0);
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
-            glGenBuffers(1, &m_IndexBuffer);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
-
-            unsigned int indices[INDEX_COUNT] =
-            {
-                3, 1, 2,
-                3, 0, 1,
-                4, 0, 3,
-                4, 5, 0,
-                0, 5, 7,
-                5, 6, 7,
-            };
-
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+            m_IndexBuffer->Bind();
 
             glBindVertexArray(m_VertexArray);
             glDrawElements(GL_TRIANGLES, INDEX_COUNT, GL_UNSIGNED_INT, nullptr);

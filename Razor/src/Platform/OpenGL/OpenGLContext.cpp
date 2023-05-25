@@ -1,5 +1,5 @@
 #include "rzr_pch.h"
-#include "Platform/OpenGL/OpenGLContext.h"
+#include "OpenGLContext.h"
 
 #include "Razor/Log.h"
 

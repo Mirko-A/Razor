@@ -12,6 +12,7 @@
 #include "LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
 
+#include "Razor/Renderer/Renderer.h"
 #include "Razor/Renderer/Shader.h"
 
 /* Mire, 5/20/2023
@@ -58,9 +59,11 @@ namespace Razor
         bool m_Running = true;
         LayerStack m_LayerStack;
 
+        std::unique_ptr<Renderer> m_Renderer;
+        std::unique_ptr<VertexBuffer> m_VertexBuffer;
+        std::unique_ptr<IndexBuffer> m_IndexBuffer;
+
         unsigned int m_VertexArray;
-        unsigned int m_VertexBuffer;
-        unsigned int m_IndexBuffer;
 
         std::unique_ptr<Shader> m_Shader;
 

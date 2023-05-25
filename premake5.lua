@@ -42,6 +42,7 @@ project "Razor"
     files
     {
         "%{prj.name}/include/**.h",
+        "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
         "%{prj.name}/vendor/glm/glm/**.hpp",
         "%{prj.name}/vendor/glm/glm/**.h",
@@ -51,6 +52,7 @@ project "Razor"
     includedirs
     {
         "%{prj.name}/include",
+        "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
         "%{prj.name}/vendor/GLFW/include",
         "%{prj.name}/vendor/Glad/include",
@@ -79,6 +81,7 @@ project "Razor"
         defines
         {
             "RZR_PLATFORM_WINDOWS",
+            "RENDER_API=OPENGL_RENDER_API",
 			"GLFW_INCLUDE_NONE"
         }
 
@@ -115,6 +118,7 @@ project "Prototype"
     includedirs
     {
         "Razor/include",
+        "Razor/src",
         "Razor/vendor/spdlog/include",
         "Razor/vendor/GLFW/include",
         "Razor/vendor/Glad/include",

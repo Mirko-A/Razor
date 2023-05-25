@@ -1,5 +1,6 @@
 #include "rzr_pch.h"
-#include "Razor/Renderer/Shader.h"
+#include "Shader.h"
+
 #include "Razor/Log.h"
 
 #include "glad/glad.h"

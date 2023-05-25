@@ -1,5 +1,5 @@
 #include "rzr_pch.h"
-#include "Razor/Log.h"
+#include "Log.h"
 
 namespace Razor
 {
