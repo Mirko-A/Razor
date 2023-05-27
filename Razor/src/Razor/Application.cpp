@@ -10,10 +10,18 @@
 
 float vertices[VERTEX_COUNT * 3 * 4] =
 {
-     -0.5f,  -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-      0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-      0.5f,   0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-     -0.5f,   0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+     -0.8f,  -0.8f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+      0.2f,  -0.8f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+      0.2f,   0.2f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+     -0.8f,   0.2f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+};
+
+float vertices1[VERTEX_COUNT * 3 * 4] =
+{
+      0.5f,   0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+      0.9f,   0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+      0.9f,   0.9f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+      0.5f,   0.9f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
 };
 
 uint32_t indices[INDEX_COUNT] =
@@ -52,8 +60,10 @@ namespace Razor
         SourceFile.close();
 
         m_Renderer = std::make_unique<Renderer>();
-        m_VertexBuffer = m_Renderer->CreateVertexBuffer(vertices, sizeof(vertices));
-        m_IndexBuffer =  m_Renderer->CreateIndexBuffer(indices, sizeof(indices));
+        m_Renderer->CreateVertexArray();
+        m_Renderer->CreateVertexBuffer(vertices, sizeof(vertices));
+        m_Renderer->CreateVertexBuffer(vertices1, sizeof(vertices1));
+        m_Renderer->CreateIndexBuffer(indices, sizeof(indices));
 
         m_Shader = std::make_unique<Shader>(VertexSourceStringStream.str(), FragmentSourceStringStream.str());
     }
@@ -85,24 +95,28 @@ namespace Razor
 
             m_Shader->Bind();
 
-            glGenVertexArrays(1, &m_VertexArray);
-            glBindVertexArray(m_VertexArray);
+            // m_Renderer->GetVertexArray()->GetVertexBuffers().begin()->get()->SetData(vertices, sizeof(vertices));
+            // m_Renderer->GetVertexArray()->GetVertexBuffers().begin()->get()->Bind();
 
-            m_VertexBuffer->SetData(vertices, sizeof(vertices));
-            m_VertexBuffer->Bind();
+            const auto& VertexArrayRef = m_Renderer->GetVertexArray();
+            VertexArrayRef->Bind();
 
-            BufferLayout Layout =
+            for (const auto& VBO : VertexArrayRef->GetVertexBuffers())
             {
-                { ShaderDataType::Float3, "vs_Position"},
-                { ShaderDataType::Float4, "vs_Color"},
-            };
+                //VBO->SetData(vertices, sizeof(vertices));
+                VBO->Bind();
 
-            m_VertexBuffer->SetLayout(Layout);
+                BufferLayout Layout =
+                {
+                    { ShaderDataType::Float3, "vs_Position"},
+                    { ShaderDataType::Float4, "vs_Color"},
+                };
 
-            m_IndexBuffer->Bind();
+                VBO->SetLayout(Layout);
+                VertexArrayRef->GetIndexBuffer()->Bind();
 
-            glBindVertexArray(m_VertexArray);
-            glDrawElements(GL_TRIANGLES, INDEX_COUNT, GL_UNSIGNED_INT, nullptr);
+                glDrawElements(GL_TRIANGLES, INDEX_COUNT, GL_UNSIGNED_INT, nullptr);
+            }
 
             m_Window->OnUpdate();
         }

@@ -10,7 +10,7 @@ namespace Razor
     OpenGLVertexBuffer::OpenGLVertexBuffer(float* Vertices, uint32_t size)
     {
         glCreateBuffers(1, &m_BufferID);
-        Bind();
+        glBindBuffer(GL_ARRAY_BUFFER, m_BufferID);
         glBufferData(GL_ARRAY_BUFFER, size, Vertices, GL_STATIC_DRAW);
     }
 
@@ -31,6 +31,8 @@ namespace Razor
 
     void OpenGLVertexBuffer::SetLayout(BufferLayout Layout)
     {
+        RZR_CORE_ASSERT(Layout.GetElements().size(), "Empty layout is not allowed!");
+     
         m_Layout = Layout;
 
         uint8_t LayoutIndex = 0;
@@ -109,7 +111,7 @@ namespace Razor
     OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* Indices, uint32_t size)
     {
         glCreateBuffers(1, &m_BufferID);
-        Bind();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_BufferID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, Indices, GL_STATIC_DRAW);
     }
 
