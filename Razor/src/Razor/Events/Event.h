@@ -21,7 +21,7 @@ namespace Razor
 
     enum EventCategory
     {
-        None = 0,
+        EventCategoryNone = 0,
         EventCategoryApplication    = BIT(0),
         EventCategoryInput          = BIT(1),
         EventCategoryKeyboard       = BIT(2),

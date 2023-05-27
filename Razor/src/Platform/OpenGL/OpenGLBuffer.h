@@ -2,6 +2,8 @@
 
 #include "Razor/Renderer/Buffer.h"
 
+#include "glad/glad.h"
+
 namespace Razor
 {
     class OpenGLVertexBuffer : public VertexBuffer
@@ -13,7 +15,13 @@ namespace Razor
         void Bind() const override;
         void Unbind() const override;
 
+        void SetLayout(BufferLayout Layout) override;
+        const BufferLayout& GetLayout() const override;
+
         void SetData(float* Vertices, uint32_t size) override;
+        
+    private:
+        GLenum ShaderDataTypeToGLenum(ShaderDataType Type);
     };
 
     class OpenGLIndexBuffer : public IndexBuffer

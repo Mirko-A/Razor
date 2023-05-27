@@ -5,31 +5,21 @@
 #include "ImGui/ImGuiLayer.h"
 #include "Input.h"
 
-// TODO: Remove once VBO and IBO abstraction is in place
-#include "glad/glad.h"
+#define VERTEX_COUNT (4)
+#define INDEX_COUNT  (6)
 
-#define VERTEX_COUNT (8)
-#define INDEX_COUNT  (6 * 3)
-
-float vertices[VERTEX_COUNT * 3] =
+float vertices[VERTEX_COUNT * 3 * 4] =
 {
-     -0.145f,  0.185f, 0.0f,
-     -0.259f,  0.309f, 0.0f,
-     -0.434f,  0.227f, 0.0f,
-     -0.454f,  0.010f, 0.0f,
-     -0.145f, -0.381f, 0.0f,
-      0.165f,  0.010f, 0.0f,
-     -0.031f,  0.310f, 0.0f,
+     -0.5f,  -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+      0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+      0.5f,   0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+     -0.5f,   0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
 };
 
 uint32_t indices[INDEX_COUNT] =
 {
+    0, 1, 3,
     3, 1, 2,
-    3, 0, 1,
-    4, 0, 3,
-    4, 5, 0,
-    0, 5, 7,
-    5, 6, 7,
 };
 
 namespace Razor
@@ -101,8 +91,13 @@ namespace Razor
             m_VertexBuffer->SetData(vertices, sizeof(vertices));
             m_VertexBuffer->Bind();
 
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+            BufferLayout Layout =
+            {
+                { ShaderDataType::Float3, "vs_Position"},
+                { ShaderDataType::Float4, "vs_Color"},
+            };
+
+            m_VertexBuffer->SetLayout(Layout);
 
             m_IndexBuffer->Bind();
 

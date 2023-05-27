@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Razor/Log.h"
+
 #ifdef RZR_DEBUG
     #define RZR_ENABLE_ASSERTS
 #endif // RZR_DEBUG

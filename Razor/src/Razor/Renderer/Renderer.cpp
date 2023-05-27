@@ -2,6 +2,12 @@
 
 #include "Renderer.h"
 
+#if (RENDER_API == OPENGL_RENDER_API)
+#include "glad/glad.h"
+#else
+
+#endif
+
 namespace Razor
 {
     Renderer::Renderer()

@@ -4,8 +4,6 @@
 
 #include "Razor/Log.h"
 
-#include "glad/glad.h"
-
 namespace Razor
 {
     /********* Vertex buffer implementation *************************/
@@ -31,9 +29,80 @@ namespace Razor
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
+    void OpenGLVertexBuffer::SetLayout(BufferLayout Layout)
+    {
+        m_Layout = Layout;
+
+        uint8_t LayoutIndex = 0;
+        for (const BufferElement& Element : Layout)
+        {
+            glEnableVertexAttribArray(LayoutIndex);
+            glVertexAttribPointer(LayoutIndex,
+                                  Element.Count,
+                                  ShaderDataTypeToGLenum(Element.Type), 
+                                  Element.Normalized ? GL_TRUE : GL_FALSE,
+                                  Layout.GetStride(),
+                                  (const void*) Element.Offset);
+
+            LayoutIndex++;
+        }
+    }
+
+    const BufferLayout& OpenGLVertexBuffer::GetLayout() const
+    {
+        return m_Layout;
+    }
+
     void OpenGLVertexBuffer::SetData(float* Vertices, uint32_t size)
     {
         glBufferData(GL_ARRAY_BUFFER, size, Vertices, GL_STATIC_DRAW);
+    }
+
+    GLenum OpenGLVertexBuffer::ShaderDataTypeToGLenum(ShaderDataType Type)
+    {
+        GLenum OpenGLType;
+
+        switch (Type)
+        {
+        case Razor::Float:
+            OpenGLType = GL_FLOAT;
+            break;
+        case Razor::Float2:
+            OpenGLType = GL_FLOAT;
+            break;
+        case Razor::Float3:
+            OpenGLType = GL_FLOAT;
+            break;
+        case Razor::Float4:
+            OpenGLType = GL_FLOAT;
+            break;
+        case Razor::Int:
+            OpenGLType = GL_INT;
+            break;
+        case Razor::Int2:
+            OpenGLType = GL_INT;
+            break;
+        case Razor::Int3:
+            OpenGLType = GL_INT;
+            break;
+        case Razor::Int4:
+            OpenGLType = GL_INT;
+            break;
+        case Razor::Mat3:
+            OpenGLType = GL_FLOAT;
+            break;
+        case Razor::Mat4:
+            OpenGLType = GL_FLOAT;
+            break;
+        case Razor::Bool:
+            OpenGLType = GL_BOOL;
+            break;
+        default:
+            RZR_CORE_ASSERT(false, "Invalid enum conversion!");
+            break;
+        }
+
+        return OpenGLType;
     }
 
     /********* Index buffer implementation *************************/

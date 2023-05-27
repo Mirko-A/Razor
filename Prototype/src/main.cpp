@@ -23,29 +23,18 @@ public:
     void RenderImGui()
     {
         ImGui::Begin("Cube editor");
-        ImGui::SliderFloat("V0 X", &vertices[3 * 0], -1.0f, 1.0f);
-        ImGui::SliderFloat("V0 Y", &vertices[3 * 0 + 1],  -1.0f, 1.0f);
+        ImGui::SliderFloat("V0 X", &vertices[7 * 0], -1.0f, 1.0f);
+        ImGui::SliderFloat("V0 Y", &vertices[7 * 0 + 1],  -1.0f, 1.0f);
 
-        ImGui::SliderFloat("V1 X", &vertices[3 * 1],  -1.0f, 1.0f);
-        ImGui::SliderFloat("V1 Y", &vertices[3 * 1 + 1],  -1.0f, 1.0f);
+        ImGui::SliderFloat("V1 X", &vertices[7 * 1],  -1.0f, 1.0f);
+        ImGui::SliderFloat("V1 Y", &vertices[7 * 1 + 1],  -1.0f, 1.0f);
 
-        ImGui::SliderFloat("V2 X", &vertices[3 * 2],  -1.0f, 1.0f);
-        ImGui::SliderFloat("V2 Y", &vertices[3 * 2 + 1],  -1.0f, 1.0f);
+        ImGui::SliderFloat("V2 X", &vertices[7 * 2],  -1.0f, 1.0f);
+        ImGui::SliderFloat("V2 Y", &vertices[7 * 2 + 1],  -1.0f, 1.0f);
 
-        ImGui::SliderFloat("V3 X", &vertices[3 * 3],  -1.0f, 1.0f);
-        ImGui::SliderFloat("V3 Y", &vertices[3 * 3 + 1], -1.0f, 1.0f);
+        ImGui::SliderFloat("V3 X", &vertices[7 * 3],  -1.0f, 1.0f);
+        ImGui::SliderFloat("V3 Y", &vertices[7 * 3 + 1], -1.0f, 1.0f);
 
-        ImGui::SliderFloat("V4 X", &vertices[3 * 4], -1.0f, 1.0f);
-        ImGui::SliderFloat("V4 Y", &vertices[3 * 4 + 1], -1.0f, 1.0f);
-
-        ImGui::SliderFloat("V5 X", &vertices[3 * 5], -1.0f, 1.0f);
-        ImGui::SliderFloat("V5 Y", &vertices[3 * 5 + 1], -1.0f, 1.0f);
-
-        ImGui::SliderFloat("V6 X", &vertices[3 * 6], -1.0f, 1.0f);
-        ImGui::SliderFloat("V6 Y", &vertices[3 * 6 + 1], -1.0f, 1.0f);
-
-        ImGui::SliderFloat("V7 X", &vertices[3 * 7], -1.0f, 1.0f);
-        ImGui::SliderFloat("V7 Y", &vertices[3 * 7 + 1], -1.0f, 1.0f);
         ImGui::End();
     }
 };
