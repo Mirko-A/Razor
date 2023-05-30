@@ -113,6 +113,8 @@ namespace Razor
         glCreateBuffers(1, &m_BufferID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_BufferID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, Indices, GL_STATIC_DRAW);
+
+        m_Count = size / sizeof(uint32_t);
     }
 
     OpenGLIndexBuffer::~OpenGLIndexBuffer()

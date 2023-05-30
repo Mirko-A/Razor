@@ -7,6 +7,7 @@ namespace Razor
     OpenGLVertexArray::OpenGLVertexArray()
     {
         glGenVertexArrays(1, &m_VertexArrayID);
+        glBindVertexArray(m_VertexArrayID);
     }
 
     void OpenGLVertexArray::Bind() const

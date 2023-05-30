@@ -145,7 +145,13 @@ namespace Razor
             return m_BufferID;
         }
 
+        inline uint32_t GetCount() const
+        {
+            return m_Count;
+        }
+
     protected:
         uint32_t m_BufferID;
+        uint32_t m_Count;
     };
 }

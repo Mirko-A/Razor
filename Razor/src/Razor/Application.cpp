@@ -8,20 +8,18 @@
 #define VERTEX_COUNT (4)
 #define INDEX_COUNT  (6)
 
-float vertices[VERTEX_COUNT * 3 * 4] =
+float vertices[VERTEX_COUNT * (3 + 4)] =
 {
-     -0.8f,  -0.8f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-      0.2f,  -0.8f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-      0.2f,   0.2f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-     -0.8f,   0.2f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+     -0.8f, -0.8f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+      0.2f, -0.8f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+      0.2f,  0.2f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+     -0.8f,  0.2f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
 };
 
-float vertices1[VERTEX_COUNT * 3 * 4] =
+Razor::BufferLayout Layout =
 {
-      0.5f,   0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-      0.9f,   0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-      0.9f,   0.9f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-      0.5f,   0.9f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+    { Razor::ShaderDataType::Float3, "vs_Position"},
+    { Razor::ShaderDataType::Float4, "vs_Color"},
 };
 
 uint32_t indices[INDEX_COUNT] =
@@ -59,11 +57,9 @@ namespace Razor
         FragmentSourceStringStream << SourceFile.rdbuf();
         SourceFile.close();
 
-        m_Renderer = std::make_unique<Renderer>();
-        m_Renderer->CreateVertexArray();
-        m_Renderer->CreateVertexBuffer(vertices, sizeof(vertices));
-        m_Renderer->CreateVertexBuffer(vertices1, sizeof(vertices1));
-        m_Renderer->CreateIndexBuffer(indices, sizeof(indices));
+        m_VertexArray = RenderCommand::CreateVertexArray();
+        m_VertexArray->AddVertexBuffer(RenderCommand::CreateVertexBuffer(vertices, sizeof(vertices), Layout));
+        m_VertexArray->SetIndexBuffer(RenderCommand::CreateIndexBuffer(indices, sizeof(indices)));
 
         m_Shader = std::make_unique<Shader>(VertexSourceStringStream.str(), FragmentSourceStringStream.str());
     }
@@ -77,9 +73,21 @@ namespace Razor
     {
         while (m_Running)
         { 
-            ImVec4 ClearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-            glClearColor(ClearColor.x * ClearColor.w, ClearColor.y * ClearColor.w, ClearColor.z * ClearColor.w, ClearColor.w);
-            glClear(GL_COLOR_BUFFER_BIT);
+            RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+            RenderCommand::Clear();
+
+            Renderer::BeginScene();
+
+            m_Shader->Bind();
+
+            for (const auto& VBO : m_VertexArray->GetVertexBuffers())
+            {
+                VBO->SetData(vertices, sizeof(vertices));
+
+                Renderer::Submit(m_VertexArray);
+            }
+
+            Renderer::EndScene();
 
             for (Layer* Layer : m_LayerStack)
             {
@@ -92,31 +100,6 @@ namespace Razor
                 Layer->RenderImGui();
             }
             m_ImGuiLayer->End();
-
-            m_Shader->Bind();
-
-            // m_Renderer->GetVertexArray()->GetVertexBuffers().begin()->get()->SetData(vertices, sizeof(vertices));
-            // m_Renderer->GetVertexArray()->GetVertexBuffers().begin()->get()->Bind();
-
-            const auto& VertexArrayRef = m_Renderer->GetVertexArray();
-            VertexArrayRef->Bind();
-
-            for (const auto& VBO : VertexArrayRef->GetVertexBuffers())
-            {
-                //VBO->SetData(vertices, sizeof(vertices));
-                VBO->Bind();
-
-                BufferLayout Layout =
-                {
-                    { ShaderDataType::Float3, "vs_Position"},
-                    { ShaderDataType::Float4, "vs_Color"},
-                };
-
-                VBO->SetLayout(Layout);
-                VertexArrayRef->GetIndexBuffer()->Bind();
-
-                glDrawElements(GL_TRIANGLES, INDEX_COUNT, GL_UNSIGNED_INT, nullptr);
-            }
 
             m_Window->OnUpdate();
         }

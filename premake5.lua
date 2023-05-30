@@ -25,6 +25,7 @@ group "Dependencies"
     include "Razor/vendor/GLFW"
     include "Razor/vendor/Glad"
     include "Razor/vendor/imgui"
+    include "Razor/vendor/glm"
 
 group ""
 
@@ -44,9 +45,6 @@ project "Razor"
         "%{prj.name}/include/**.h",
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
-        "%{prj.name}/vendor/glm/glm/**.hpp",
-        "%{prj.name}/vendor/glm/glm/**.h",
-        "%{prj.name}/vendor/glm/glm/**.inl",
     }
 
     includedirs
@@ -57,7 +55,7 @@ project "Razor"
         "%{prj.name}/vendor/GLFW/include",
         "%{prj.name}/vendor/Glad/include",
 		"%{prj.name}/vendor/imgui",
-		"%{prj.name}/vendor/glm/glm",
+		"%{prj.name}/vendor/glm",
     }
 
     links
@@ -81,7 +79,7 @@ project "Razor"
         defines
         {
             "RZR_PLATFORM_WINDOWS",
-            "RENDER_API=OPENGL_RENDER_API",
+            "RENDERER_API=OPENGL_RENDERER_API",
 			"GLFW_INCLUDE_NONE"
         }
 
@@ -123,7 +121,7 @@ project "Prototype"
         "Razor/vendor/GLFW/include",
         "Razor/vendor/Glad/include",
 		"Razor/vendor/imgui",
-		"Razor/vendor/glm/glm",
+		"Razor/vendor/glm",
     }
 
     links
