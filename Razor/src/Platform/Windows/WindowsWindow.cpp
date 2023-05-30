@@ -1,7 +1,7 @@
 #include "rzr_pch.h"
 #include "Platform/Windows/WindowsWindow.h"
 
-#include "Platform/OpenGL/OpenGLContext.h"
+#include "Razor/Renderer/RenderContext.h"
 
 #include "Razor/Events/ApplicationEvent.h"
 #include "Razor/Events/KeyEvent.h"
@@ -35,7 +35,7 @@ namespace Razor
         }
 
         m_NativeWindow = glfwCreateWindow((int)Props.Width, (int)Props.Height, Props.Title.c_str(), nullptr, nullptr);
-        m_Context = new OpenGLContext();
+        m_Context = new RenderContext();
         m_Context->Init(m_NativeWindow);
 
         glfwSetWindowUserPointer(m_NativeWindow, &m_Data);
