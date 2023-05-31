@@ -1,33 +1,6 @@
 #include "rzr_pch.h"
 #include "Application.h"
 
-#include "Layer.h"
-#include "ImGui/ImGuiLayer.h"
-#include "Input.h"
-
-#define VERTEX_COUNT (4)
-#define INDEX_COUNT  (6)
-
-float vertices[VERTEX_COUNT * (3 + 4)] =
-{
-     -0.8f, -0.8f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-      0.2f, -0.8f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-      0.2f,  0.2f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-     -0.8f,  0.2f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-};
-
-Razor::BufferLayout Layout =
-{
-    { Razor::ShaderDataType::Float3, "vs_Position"},
-    { Razor::ShaderDataType::Float4, "vs_Color"},
-};
-
-uint32_t indices[INDEX_COUNT] =
-{
-    0, 1, 3,
-    3, 1, 2,
-};
-
 namespace Razor
 {
     Application* Application::s_Instance = nullptr;
@@ -42,26 +15,6 @@ namespace Razor
 
         m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
-
-        std::ifstream SourceFile;
-        std::stringstream VertexSourceStringStream;
-        std::stringstream FragmentSourceStringStream;
-
-        SourceFile.open("VertexSource.txt", std::ios::in);
-        RZR_CORE_ASSERT(SourceFile.is_open(), "Failed to load Vertex Shader source file!");
-        VertexSourceStringStream << SourceFile.rdbuf();
-        SourceFile.close();
-
-        SourceFile.open("FragmentSource.txt", std::ios::in);
-        RZR_CORE_ASSERT(SourceFile.is_open(), "Failed to load Fragment  Shader source file!");
-        FragmentSourceStringStream << SourceFile.rdbuf();
-        SourceFile.close();
-
-        m_VertexArray = RenderCommand::CreateVertexArray();
-        m_VertexArray->AddVertexBuffer(RenderCommand::CreateVertexBuffer(vertices, sizeof(vertices), Layout));
-        m_VertexArray->SetIndexBuffer(RenderCommand::CreateIndexBuffer(indices, sizeof(indices)));
-
-        m_Shader = std::make_unique<Shader>(VertexSourceStringStream.str(), FragmentSourceStringStream.str());
     }
 
     Application::~Application() 
@@ -72,23 +25,7 @@ namespace Razor
     void Application::Run()
     {
         while (m_Running)
-        { 
-            RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-            RenderCommand::Clear();
-
-            Renderer::BeginScene();
-
-            m_Shader->Bind();
-
-            for (const auto& VBO : m_VertexArray->GetVertexBuffers())
-            {
-                VBO->SetData(vertices, sizeof(vertices));
-
-                Renderer::Submit(m_VertexArray);
-            }
-
-            Renderer::EndScene();
-
+        {
             for (Layer* Layer : m_LayerStack)
             {
                 Layer->OnUpdate();

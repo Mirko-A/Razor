@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "glm/glm.hpp"
 
 namespace Razor
 {
@@ -12,6 +13,9 @@ namespace Razor
 
         void Bind() const;
         void Unbind() const;
+
+        void UploadUniform(const std::string& Name, glm::mat4 Uniform);
+
     private:
         uint32_t m_ShaderID;
     };

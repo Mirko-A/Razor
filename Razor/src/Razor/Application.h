@@ -12,9 +12,6 @@
 #include "LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
 
-#include "Razor/Renderer/Renderer.h"
-#include "Razor/Renderer/Shader.h"
-
 /* Mire, 5/20/2023
    Razor has been converted into a static library. This means that
    as of right now the usage of Razor by clients is as follows:
@@ -58,10 +55,6 @@ namespace Razor
         ImGuiLayer* m_ImGuiLayer;
         bool m_Running = true;
         LayerStack m_LayerStack;
-
-        std::shared_ptr<VertexArray> m_VertexArray;
-
-        std::unique_ptr<Shader> m_Shader;
 
     private:
         bool OnWindowClose(WindowCloseEvent e);

@@ -24,3 +24,13 @@ int main(int argc, char** argv)
 
 #include "Razor/Application.h"
 #include "Razor/Log.h"
+
+#include "Razor/Layer.h"
+#include "Razor/ImGui/ImGuiLayer.h"
+#include "Razor/Input.h"
+
+#include "Razor/Renderer/Renderer.h"
+#include "Razor/Renderer/RenderCommand.h"
+#include "Razor/Renderer/VertexArray.h"
+#include "Razor/Renderer/Shader.h"
+#include "Razor/Renderer/Camera.h"

@@ -5,6 +5,8 @@
 
 #include "glad/glad.h"
 
+#include "glm/gtc/type_ptr.hpp"
+
 namespace Razor
 {
     Shader::Shader(const std::string& VertexSource, const std::string& FragmentSource)
@@ -123,5 +125,14 @@ namespace Razor
     void Shader::Unbind() const
     {
         glUseProgram(0);
+    }
+
+    void Shader::UploadUniform(const std::string& Name, glm::mat4 Uniform)
+    {
+        GLint UniformLocation = glGetUniformLocation(m_ShaderID, Name.c_str());
+        glUniformMatrix4fv(UniformLocation,
+                           1,
+                           GL_FALSE,
+                           glm::value_ptr(Uniform));
     }
 }
